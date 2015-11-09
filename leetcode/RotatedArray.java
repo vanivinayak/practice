@@ -26,14 +26,11 @@ public class RotatedArray {
 	//Time = O(log n)
 	public int rotatedIndexByBinarySearch(int[] ar, int st, int end){
 		int mid;
-		if (st<end)
+		if (st<end && ar[st]>ar[end])
 		{
 			mid = (st+end)/2;
-			if( (ar[mid] < ar[mid-1] && ar[mid]< ar[mid+1]) ){
-				return mid;
-			}
 			if(ar[mid]<ar[end]){
-				return rotatedIndexByBinarySearch(ar,st,mid-1);
+				return rotatedIndexByBinarySearch(ar,st,mid);
 			} else{
 				return rotatedIndexByBinarySearch(ar,mid+1,end);
 			}
@@ -69,10 +66,18 @@ public class RotatedArray {
 	// Returns the minimum element of the rotated array
 	//Condition: provided there are no duplicates
 	public int findMinimumInRotatedArray(int[] ar){
-		//int pivot = rotationBy(ar);
-		int pivot = rotatedIndexByBinarySearch(ar,0,ar.length-1);
-		if(pivot == -1) return -1234;
-		else return ar[pivot];
+		int st =0; int end = ar.length-1; int mid =0;
+        while (st<end && ar[st] > ar[end])
+		{
+			mid = (st+end)/2;
+			if(ar[mid] < ar[end]){
+				end = mid;
+			} else{
+			st = mid+1;
+			}
+		}
+	
+	    return ar[st];
 	}
 	
 	// Returns the minimum element of the rotated array
@@ -107,9 +112,9 @@ public class RotatedArray {
 		
 		System.out.println("index of target on rotated array ar= "+ ra.binarySearchOnRotatedArray(ar, 7));
 		System.out.println("index of target on rotated array ar1= "+ ra.binarySearchOnRotatedArray(ar1, 2));
-		System.out.println("Find Min in Rorate Array ar= "+ra.findMinimumInRotatedArray(ar));
+		System.out.println("Find Min in Rorate Array ar= "+ra.findMinimumInRotatedArray(new int[] {3,1,2}));
 		
-		System.out.println("Find rotated Index using binary search in Array ar= "+ra.rotatedIndexByBinarySearch(ar, 0, ar.length-1));
+		System.out.println("Find rotated Index using binary search in Array ar= "+ra.rotatedIndexByBinarySearch(new int[] {3,1,2}, 0, 2));
 		int[] ar3= {2,3,1,2,2,2,2,2,2,2,2}; //{1,0,1,1,1,1};
 		System.out.println("Find Min in Rorate Array with DUPLICTAES ar3= "+ra.findMinimumInRotatedArray2(ar3));
 	}
